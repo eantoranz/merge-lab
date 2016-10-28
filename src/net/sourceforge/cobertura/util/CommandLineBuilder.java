@@ -139,6 +139,10 @@ public class CommandLineBuilder {
 		commandLineWriter.flush();
 		commandLineWriter.close();
 	}
+	
+	public void methodBranchA() {
+		System.out.println("Here's a method that is implemented on Branch A");
+	}
 
 	/**
 	 * Gets absolute path to the file with saved arguments. Notice, that however
@@ -149,6 +153,7 @@ public class CommandLineBuilder {
 	 * @return absolute path to the file with arguments
 	 */
 	public String getCommandLineFile() {
+		methodBranchA();
 		return commandLineFile.getAbsolutePath();
 	}
 
