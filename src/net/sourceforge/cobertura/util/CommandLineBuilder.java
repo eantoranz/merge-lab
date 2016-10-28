@@ -185,6 +185,9 @@ public class CommandLineBuilder {
 				hasCommandsFile = true;
 				commandsFileName = args[++i];
 			}
+			if (args[i].equals( "--whocares")) { // I know I know.... else if, but then git didn't fall in the trap ;-)
+				System.out.println("Who cares?");
+			}
 		}
 
 		if (hasCommandsFile) {
