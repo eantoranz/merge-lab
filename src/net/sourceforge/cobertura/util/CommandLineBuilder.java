@@ -151,6 +151,11 @@ public class CommandLineBuilder {
 	public String getCommandLineFile() {
 		return commandLineFile.getAbsolutePath();
 	}
+	
+	private void methodOnBranchA() {
+		System.out.println("This is a method that exists on branch A");
+		System.out.println("This is all right");
+	}
 
 	/**
 	 * Explicity frees all resources associated with this instance. Result of
@@ -158,6 +163,8 @@ public class CommandLineBuilder {
 	 * unspecified.
 	 */
 	public void dispose() {
+		// some call to method on branch A
+		methodOnBranchA();
 		commandLineFile.delete();
 	}
 
