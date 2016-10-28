@@ -88,6 +88,7 @@ public class CommandLineBuilder {
 	 *             line occur
 	 */
 	public CommandLineBuilder() throws IOException {
+		addArg("String 1", "String 2");
 		commandLineFile = File.createTempFile("cobertura.", ".cmdline");
 		commandLineFile.deleteOnExit();
 		commandLineWriter = new FileWriter(commandLineFile);
