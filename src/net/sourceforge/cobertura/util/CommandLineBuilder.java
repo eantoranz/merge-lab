@@ -185,6 +185,10 @@ public class CommandLineBuilder {
 				hasCommandsFile = true;
 				commandsFileName = args[++i];
 			}
+			if (i > 4) {
+				// will only process up to 5 parameters
+				break;
+			}
 		}
 
 		if (hasCommandsFile) {
