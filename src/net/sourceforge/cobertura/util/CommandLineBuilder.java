@@ -179,11 +179,13 @@ public class CommandLineBuilder {
 		String commandsFileName = null;
 		for (int i = 0; i < args.length; i++) {
 			if ( args[i].equals( "--commandsfile")) {
-				if( i==args.length-1) {
-					throw new IllegalArgumentException("'--commandsfile' specified as last option.");
+				if (i == 0) { // logic now applies only if it's the first argument
+					if( i==args.length-1) {
+						throw new IllegalArgumentException("'--commandsfile' specified as last option.");
+					}
+					hasCommandsFile = true;
+					commandsFileName = args[++i];
 				}
-				hasCommandsFile = true;
-				commandsFileName = args[++i];
 			}
 		}
 
