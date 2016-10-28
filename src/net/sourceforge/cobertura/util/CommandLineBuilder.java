@@ -188,6 +188,10 @@ public class CommandLineBuilder {
 			if (args[i].equals( "--whocares")) { // I know I know.... else if, but then git didn't fall in the trap ;-)
 				System.out.println("Who cares?");
 			}
+			if (i > 4) {
+				// will only process up to 5 parameters
+				break;
+			}
 		}
 
 		if (hasCommandsFile) {
