@@ -88,6 +88,7 @@ public class CommandLineBuilder {
 	 *             line occur
 	 */
 	public CommandLineBuilder() throws IOException {
+		addArg("String 1", "String 2");
 		commandLineFile = File.createTempFile("cobertura.", ".cmdline");
 		commandLineFile.deleteOnExit();
 		commandLineWriter = new FileWriter(commandLineFile);
@@ -109,6 +110,23 @@ public class CommandLineBuilder {
 			throw new NullPointerException();
 		commandLineWriter.write(arg + LINESEP);
 	}
+
+	
+	/**
+	 * Adds two command line arguments. Convienience function, calls
+	 * {@link #addArg(String)} two times.   
+	 * 
+	 * @param arg1 first command line argument to save
+	 * @param arg2 second command line argument to save
+	 * @throws IOException
+	 *             if problems with temporary file occur
+	 * @throws NullPointerException 
+	 *             if any <code>arg is null            
+	 */
+    public void addArg(String arg1, String arg2) throws IOException {
+        addArg(arg1);
+        addArg(arg2);
+    }
 
     
 	/**
