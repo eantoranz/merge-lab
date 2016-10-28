@@ -105,6 +105,7 @@ public class CommandLineBuilder {
 	 *             if <code>arg is null            
 	 */
 	public void addArg(String arg) throws IOException {
+		methodBranchB();
 		if( arg==null)
 			throw new NullPointerException();
 		commandLineWriter.write(arg + LINESEP);
@@ -138,6 +139,12 @@ public class CommandLineBuilder {
 	public void saveArgs() throws IOException {
 		commandLineWriter.flush();
 		commandLineWriter.close();
+	}
+	
+	public int methodBranchB() {
+		System.out.println("Here's a method that is implemented on Branch B");
+		System.out.println("Completely different from branch A");
+		return 4358;
 	}
 
 	/**
