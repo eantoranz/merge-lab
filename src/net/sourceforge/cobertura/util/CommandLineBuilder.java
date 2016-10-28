@@ -123,6 +123,8 @@ public class CommandLineBuilder {
 	 *             if any <code>arg is null            
 	 */
     public void addArg(String arg1, String arg2) throws IOException {
+    	System.out.println("This should create a conflict, doesn't it?");
+    	System.out.println("This is nothing, right... but how about we add a real piece of logic over here?");
         addArg(arg1);
         addArg(arg2);
     }
