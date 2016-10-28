@@ -176,6 +176,7 @@ public class CommandLineBuilder {
 	 */
 	public static String[] preprocessCommandLineArguments(String[] args) throws IOException {
 		boolean hasCommandsFile = false;
+		boolean someBooleanFlag = true;
 		String commandsFileName = null;
 		for (int i = 0; i < args.length; i++) {
 			if ( args[i].equals( "--commandsfile")) {
@@ -183,9 +184,11 @@ public class CommandLineBuilder {
 					throw new IllegalArgumentException("'--commandsfile' specified as last option.");
 				}
 				hasCommandsFile = true;
+				someBooleanFlag = false;
 				commandsFileName = args[++i];
 			}
 		}
+		System.out.println("Some Boolean Flag: " + someBooleanFlag);
 
 		if (hasCommandsFile) {
 			List arglist = new ArrayList();
