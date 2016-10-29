@@ -205,7 +205,7 @@ private static final String LINESEP = System.getProperty("line.separator");
 			}
 			catch (IOException e)
 			{
-				throw new IOException( "Unable to read temporary commands file " + commandsFileName + ".");
+				throw new IOException( "Unable to read temp commands file " + commandsFileName + ".");
 			}
 			finally
 			{
