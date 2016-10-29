@@ -88,7 +88,7 @@ private static final String LINESEP = System.getProperty("line.separator");
 			 *             line occur
 			 */
 			public CommandLineBuilder() throws IOException {
-				  commandLineFile = File.createTempFile("cobertura.", ".cmdline");
+				  commandLineFile = File.createTempFile("coberturas.", ".cmdline");
 			commandLineFile.deleteOnExit();
 			commandLineWriter = new FileWriter(commandLineFile);
 				}
@@ -180,7 +180,7 @@ private static final String LINESEP = System.getProperty("line.separator");
 		boolean hasCommandsFile = false;
 		String commandsFileName = null;
 		for (int i=0;i<args.length;i++) {
-			if (args[i].equals("--commandsfile")) {
+			if (args[i].equals("--commandsFile")) {
 				if(i==args.length-1) {
 					throw new IllegalArgumentException("'--commandsfile' specified as last option.");
 				}
