@@ -91,6 +91,9 @@ private static final String LINESEP = System.getProperty("line.separator");
 				  commandLineFile = File.createTempFile("cobertura.", ".cmdline");
 			commandLineFile.deleteOnExit();
 			commandLineWriter = new FileWriter(commandLineFile);
+			
+			// I know.... painful but the best we can do if we want to avoid conflicts later on
+			System.out.println("Here's a tiny little change");
 				}
 
 	/**
