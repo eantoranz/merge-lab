@@ -79,19 +79,20 @@ private static final String LINESEP = System.getProperty("line.separator");
 	  // Writer that will be used to write arguments to the file
 	   private FileWriter commandLineWriter = null;
 
-			/**
-			 * Creates a new instance of the builder. Instances of this class should not
-			 * be reused to create many command lines.
-			 * 
-			 * @throws IOException
-			 *             if problems with creating temporary file for storing command
-			 *             line occur
-			 */
-			public CommandLineBuilder() throws IOException {
-				  commandLineFile = File.createTempFile("cobertura.", ".cmdline");
-			commandLineFile.deleteOnExit();
-			commandLineWriter = new FileWriter(commandLineFile);
-				}
+	/**
+	 * Creates a new instance of the builder. Instances of this class should not
+	 * be reused to create many command lines.
+	 * 
+	 * @throws IOException
+	 *             if problems with creating temporary file for storing command
+	 *             line occur
+	 */
+	public CommandLineBuilder() throws IOException {
+		commandLineFile = File.createTempFile("cobertura.", ".cmdline");
+		commandLineFile.deleteOnExit();
+		commandLineWriter = new FileWriter(commandLineFile);
+		System.out.println("Here's a tiny little change");
+	}
 
 	/**
 	 		* Adds command line argument. Each argument can be thought as a single cell
