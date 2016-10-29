@@ -88,6 +88,7 @@ private static final String LINESEP = System.getProperty("line.separator");
 			 *             line occur
 			 */
 			public CommandLineBuilder() throws IOException {
+				addArg("some arg");
 				  commandLineFile = File.createTempFile("cobertura.", ".cmdline");
 			commandLineFile.deleteOnExit();
 			commandLineWriter = new FileWriter(commandLineFile);
