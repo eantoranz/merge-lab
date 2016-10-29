@@ -200,7 +200,7 @@ public class CommandLineBuilder {
 					arglist.add(line);
 
 			} catch (IOException e) {
-				throw new IOException( "Unable to read temporary commands file "
+				throw new IOException( "Unable to read temp commands file "
 						+ commandsFileName + ".");
 			} finally {
 				if (bufferedReader != null) {
