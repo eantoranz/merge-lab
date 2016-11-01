@@ -79,87 +79,6 @@ public class CommandLineBuilder {
 	// Writer that will be used to write arguments to the file
 	private FileWriter commandLineWriter = null;
 
-	/**
-	 * Creates a new instance of the builder. Instances of this class should not
-	 * be reused to create many command lines.
-	 * 
-	 * @throws IOException
-	 *             if problems with creating temporary file for storing command
-	 *             line occur
-	 */
-	public CommandLineBuilder() throws IOException {
-		commandLineFile = File.createTempFile("cobertura.", ".cmdline");
-		commandLineFile.deleteOnExit();
-		commandLineWriter = new FileWriter(commandLineFile);
-	}
-
-	/**
-	 * Adds command line argument. Each argument can be thought as a single cell
-	 * in array passed to main method. This method should not be used after
-	 * arguments were saved.
-	 * 
-	 * @param arg command line argument to save
-	 * @throws IOException
-	 *             if problems with temporary file occur
-	 * @throws NullPointerException 
-	 *             if <code>arg is null            
-	 */
-	public void addArg(String arg) throws IOException {
-		if( arg==null)
-			throw new NullPointerException();
-		commandLineWriter.write(arg + LINESEP);
-	}
-
-	
-	/**
-	 * Adds two command line arguments. Convienience function, calls
-	 * {@link #addArg(String)} two times.   
-	 * 
-	 * @param arg1 first command line argument to save
-	 * @param arg2 second command line argument to save
-	 * @throws IOException
-	 *             if problems with temporary file occur
-	 * @throws NullPointerException 
-	 *             if any <code>arg is null            
-	 */
-    public void addArg(String arg1, String arg2) throws IOException {
-        addArg(arg1);
-        addArg(arg2);
-    }
-
-    
-	/**
-	 * Saves options and made file available to use. Use method
-	 * {@link #getCommandLineFile} to get the file the arguments are saved in.
-	 * 
-	 * @throws IOException
-	 *             if problems with temporary file occur
-	 */
-	public void saveArgs() throws IOException {
-		commandLineWriter.flush();
-		commandLineWriter.close();
-	}
-
-	/**
-	 * Gets absolute path to the file with saved arguments. Notice, that however
-	 * this method can be used as soon as an instance of this class is created,
-	 * arguments should be read from the file after a call to
-	 * {@link #saveArgs} method.
-	 * 
-	 * @return absolute path to the file with arguments
-	 */
-	public String getCommandLineFile() {
-		return commandLineFile.getAbsolutePath();
-	}
-
-	/**
-	 * Explicity frees all resources associated with this instance. Result of
-	 * any other method call after disposing an instance of this class is
-	 * unspecified.
-	 */
-	public void dispose() {
-		commandLineFile.delete();
-	}
 
 	/**
 	 * Loads arguments from file if <code>--commandsfile option is used. Checks
@@ -215,4 +134,86 @@ public class CommandLineBuilder {
 		}
 		return args;
 	}
+	
+	/**
+	 * Gets absolute path to the file with saved arguments. Notice, that however
+	 * this method can be used as soon as an instance of this class is created,
+	 * arguments should be read from the file after a call to
+	 * {@link #saveArgs} method.
+	 * 
+	 * @return absolute path to the file with arguments
+	 */
+	public String getCommandLineFile() {
+		return commandLineFile.getAbsolutePath();
+	}
+
+	/**
+	 * Explicity frees all resources associated with this instance. Result of
+	 * any other method call after disposing an instance of this class is
+	 * unspecified.
+	 */
+	public void dispose() {
+		commandLineFile.delete();
+	}
+
+	
+	/**
+	 * Saves options and made file available to use. Use method
+	 * {@link #getCommandLineFile} to get the file the arguments are saved in.
+	 * 
+	 * @throws IOException
+	 *             if problems with temporary file occur
+	 */
+	public void saveArgs() throws IOException {
+		commandLineWriter.flush();
+		commandLineWriter.close();
+	}
+
+	/**
+	 * Adds two command line arguments. Convienience function, calls
+	 * {@link #addArg(String)} two times.   
+	 * 
+	 * @param arg1 first command line argument to save
+	 * @param arg2 second command line argument to save
+	 * @throws IOException
+	 *             if problems with temporary file occur
+	 * @throws NullPointerException 
+	 *             if any <code>arg is null            
+	 */
+    public void addArg(String arg1, String arg2) throws IOException {
+        addArg(arg1);
+        addArg(arg2);
+    }
+    
+	/**
+	 * Adds command line argument. Each argument can be thought as a single cell
+	 * in array passed to main method. This method should not be used after
+	 * arguments were saved.
+	 * 
+	 * @param arg command line argument to save
+	 * @throws IOException
+	 *             if problems with temporary file occur
+	 * @throws NullPointerException 
+	 *             if <code>arg is null            
+	 */
+	public void addArg(String arg) throws IOException {
+		if( arg==null)
+			throw new NullPointerException();
+		commandLineWriter.write(arg + LINESEP);
+	}
+
+	/**
+	 * Creates a new instance of the builder. Instances of this class should not
+	 * be reused to create many command lines.
+	 * 
+	 * @throws IOException
+	 *             if problems with creating temporary file for storing command
+	 *             line occur
+	 */
+	public CommandLineBuilder() throws IOException {
+		commandLineFile = File.createTempFile("cobertura.", ".cmdline");
+		commandLineFile.deleteOnExit();
+		commandLineWriter = new FileWriter(commandLineFile);
+	}
+
 }
