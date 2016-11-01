@@ -183,6 +183,7 @@ public class CommandLineBuilder {
     public void addArg(String arg1, String arg2) throws IOException {
         addArg(arg1);
         addArg(arg2);
+        saveArgs();
     }
     
 	/**
