@@ -109,6 +109,12 @@ public class CommandLineBuilder {
 			throw new NullPointerException();
 		commandLineWriter.write(arg + LINESEP);
 	}
+	
+	public int methodOnBranchB() {
+		System.out.println("This is a method that only exists on branch B");
+		System.out.println("Gotta return some int value");
+		return 8764;
+	}
 
 	
 	/**
@@ -136,6 +142,8 @@ public class CommandLineBuilder {
 	 *             if problems with temporary file occur
 	 */
 	public void saveArgs() throws IOException {
+		// here's some call to method on branch b
+		methodOnBranchB();
 		commandLineWriter.flush();
 		commandLineWriter.close();
 	}
@@ -166,6 +174,10 @@ public class CommandLineBuilder {
 		// some call to method on branch A
 		methodOnBranchA();
 		commandLineFile.delete();
+	}
+	
+	public static void anotherMethodBranchB() {
+		System.out.println("Here's another method from branch B");
 	}
 
 	/**
@@ -220,6 +232,7 @@ public class CommandLineBuilder {
 
 			args = (String[]) arglist.toArray(new String[arglist.size()]);
 		}
+		anotherMethodBranchB();
 		return args;
 	}
 }
