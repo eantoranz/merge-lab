@@ -46,6 +46,16 @@ public class EOLCDT {
 		return gitProcess.exitValue();
 	}
 	
+	private static String getMergeBase(String treeish1, String treeish2) throws IOException, InterruptedException {
+		ArrayList<String> output = new ArrayList<String>();
+		int exitCode = getOutput("merge-base", output, new String[]{treeish1, treeish2});
+		if (exitCode == 0) {
+			return output.get(0);
+		} else {
+			throw new IOException("Error getting merge base (" + treeish1 + ", " + treeish2 + ")");
+		}
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		System.out.println("EOL Change Detection Tool");
 		System.out.println("Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>");
@@ -56,14 +66,7 @@ public class EOLCDT {
 			System.exit(1);
 		}
 		
-		ArrayList<String> output = new ArrayList<String>();
-		int exitCode = getOutput("merge-base", output, args);
-		if (exitCode == 0) {
-			System.out.println("Merge Base: " + output.get(0));
-		} else {
-			System.err.println("Error getting merge base");
-			System.exit(exitCode);
-		}
+		System.out.println("merge base: " + getMergeBase(args[0], args[1]));
 	}
 
 }
