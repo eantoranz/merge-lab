@@ -1,5 +1,12 @@
 package eantoranz.tools.git;
 
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /*
  * Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>
  * 
@@ -15,8 +22,31 @@ package eantoranz.tools.git;
  *
  */
 public class EOLCDT {
-
-	public static void main(String[] args) {
+	
+	private static int getOutput(String gitCommand, List<String> output) throws IOException, InterruptedException {
+		return getOutput(gitCommand, output, null);
+	}
+	
+	private static int getOutput(String gitCommand, List<String> output, String[] args) throws IOException, InterruptedException {
+		ArrayList<String> commands = new ArrayList<>();
+		commands.add("git");
+		commands.add(gitCommand);
+		if (args != null) {
+			commands.addAll(Arrays.asList(args));
+		}
+		Process gitProcess = Runtime.getRuntime().exec(commands.toArray(new String[commands.size()]));
+		BufferedReader stdoutReader = new BufferedReader(new InputStreamReader(gitProcess.getInputStream()));
+		String aLine;
+		do {
+			aLine = stdoutReader.readLine();
+			if (aLine != null) {
+				output.add(aLine);
+			}
+		} while (aLine != null);
+		return gitProcess.exitValue();
+	}
+	
+	public static void main(String[] args) throws IOException, InterruptedException {
 		System.out.println("EOL Change Detection Tool");
 		System.out.println("Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>");
 		
@@ -26,6 +56,14 @@ public class EOLCDT {
 			System.exit(1);
 		}
 		
+		ArrayList<String> output = new ArrayList<String>();
+		int exitCode = getOutput("merge-base", output, args);
+		if (exitCode == 0) {
+			System.out.println("Merge Base: " + output.get(0));
+		} else {
+			System.err.println("Error getting merge base");
+			System.exit(exitCode);
+		}
 	}
 
 }
