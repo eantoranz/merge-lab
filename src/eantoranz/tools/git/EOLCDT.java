@@ -43,7 +43,7 @@ public class EOLCDT {
 				output.add(aLine);
 			}
 		} while (aLine != null);
-		return gitProcess.exitValue();
+		return gitProcess.waitFor();
 	}
 	
 	private static String getMergeBase(String treeish1, String treeish2) throws IOException, InterruptedException {
@@ -56,6 +56,31 @@ public class EOLCDT {
 		}
 	}
 	
+	private static ArrayList<String> getDiff(String treeish1, String treeish2) throws IOException, InterruptedException {
+		ArrayList<String> output = new ArrayList<String>();
+		int exitCode = getOutput("diff", output, new String[]{"--name-status", treeish1, treeish2});
+		if (exitCode == 0) {
+			return output;
+		} else {
+			throw new IOException("Error getting diff (" + treeish1 + ", " + treeish2 + ")");
+		}
+	}
+	
+	/**
+	 * List of files must be coming from diff --name-status
+	 * @param listOfFiles
+	 * @return
+	 */
+	private static ArrayList<String> getModifiedFiles(List<String> listOfFiles) {
+		ArrayList<String> res = new ArrayList<>();
+		for (String diffLine: listOfFiles){
+			if (diffLine.charAt(0) == 'M') {
+				res.add(diffLine.substring(2));
+			}
+		};
+		return res;
+	}
+	
 	public static void main(String[] args) throws IOException, InterruptedException {
 		System.out.println("EOL Change Detection Tool");
 		System.out.println("Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>");
@@ -66,7 +91,11 @@ public class EOLCDT {
 			System.exit(1);
 		}
 		
-		System.out.println("merge base: " + getMergeBase(args[0], args[1]));
+		String mergeBase = getMergeBase(args[0], args[1]);
+		
+		// have to look for the files hat changed between merge-base and each branch
+		ArrayList<String> modifiedFilesBranch1 = getModifiedFiles(getDiff(mergeBase, args[0]));
+		ArrayList<String> modifiedFilesBranch2 = getModifiedFiles(getDiff(mergeBase, args[1]));
 	}
 
 }
