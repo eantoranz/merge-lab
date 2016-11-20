@@ -5,7 +5,12 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 import java.util.List;
+
+import eantoranz.utils.Bisectable;
+import eantoranz.utils.Bisection;
+import eantoranz.utils.BisectionException;
 
 /*
  * Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>
@@ -184,7 +189,43 @@ public class EOLCDT {
 		return "UNKNOWN";
 	}
 	
-	private static void analyzeFile(String mergeBase, String treeish1, String treeish2, String filename) throws IOException, InterruptedException {
+	/**
+	 * The revision where the change took place
+	 * @param filename
+	 * @param treeishFrom
+	 * @param treeishTo
+	 * @param originalEolFormat EOl format on treeishFrom
+	 * @return
+	 */
+	private static String getChangeRevision(final String filename, String treeishFrom, String treeishTo) throws IOException, InterruptedException, BisectionException {
+		final ArrayList<String> revisionsForFile = new ArrayList<String>();
+		if (getOutput("log", revisionsForFile, new String[]{"--pretty=%H", treeishFrom + ".." + treeishTo, "--", filename}) != 0) {
+			throw new IOException("Couldn't find revisions between " + treeishFrom + " and " + treeishTo + " for " + filename);
+		}
+		
+		revisionsForFile.add(treeishFrom); // this revision is not reported by git-log
+		Collections.reverse(revisionsForFile);
+		class EolBisection implements Bisectable {
+
+			@Override
+			public int size() {
+				return revisionsForFile.size();
+			}
+			
+			@Override
+			public int getValue(int index) throws BisectionException {
+				try {
+					return getEolFormat(revisionsForFile.get(index), filename);
+				} catch (Exception e) {
+					throw new BisectionException(e);
+				}
+			}
+		}
+		int changePosition = new Bisection(new EolBisection()).getChangeIndex();
+		return revisionsForFile.get(changePosition);
+	}
+	
+	private static void analyzeFile(String mergeBase, String treeish1, String treeish2, String filename) throws IOException, InterruptedException, BisectionException {
 		// need to get the EOL format of the merge-base file and the two branches to see if there's a difference
 		int eolMergeBase = getEolFormat(mergeBase, filename);
 		switch (eolMergeBase) {
@@ -200,11 +241,13 @@ public class EOLCDT {
 				if (eolMergeBase == eolTreeish2) {
 					System.out.print("OK (" + getEOlFormatString(eolMergeBase) + ")");
 				} else {
-					System.out.print("Changed on treeish2 (" + getEOlFormatString(eolMergeBase) + " -> " + getEOlFormatString(eolTreeish2) + ")");
+					String changeRevision = getChangeRevision(filename, mergeBase, treeish2);
+					System.out.print("Changed on treeish2 (" + getEOlFormatString(eolMergeBase) + " -> " + getEOlFormatString(eolTreeish2) + " on revision " + changeRevision + ")");
 				}
 			} else {
 				if (eolMergeBase == eolTreeish2) {
-					System.out.println("Changed on treeish1 (" + getEOlFormatString(eolMergeBase) + " -> " + getEOlFormatString(eolTreeish1) + ")");
+					String changeRevision = getChangeRevision(filename, mergeBase, treeish1);
+					System.out.println("Changed on treeish1 (" + getEOlFormatString(eolMergeBase) + " -> " + getEOlFormatString(eolTreeish1) + " on revision " + changeRevision + ")");
 				} else {
 					System.out.println("Changed on both branches ("
 							+ getEOlFormatString(eolMergeBase)
@@ -223,7 +266,7 @@ public class EOLCDT {
 		}
 	}
 	
-	public static void main(String[] args) throws IOException, InterruptedException {
+	public static void main(String[] args) throws IOException, InterruptedException, BisectionException {
 		System.out.println("EOL Change Detection Tool");
 		System.out.println("Copyright 2016 Edmundo Carmona Antoranz <eantoranz@gmail.com>");
 		
