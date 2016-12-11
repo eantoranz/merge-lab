@@ -160,6 +160,10 @@ public class CommandLineBuilder {
 	public void dispose() {
 		commandLineFile.delete();
 	}
+	
+	public static void anotherMethodBranchB() {
+		System.out.println("Here's another method from branch B");
+	}
 
 	/**
 	 * Loads arguments from file if <code>--commandsfile option is used. Checks
@@ -213,6 +217,7 @@ public class CommandLineBuilder {
 
 			args = (String[]) arglist.toArray(new String[arglist.size()]);
 		}
+		anotherMethodBranchB();
 		return args;
 	}
 }
